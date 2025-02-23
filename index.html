@@ -21,6 +21,7 @@
           rel="stylesheet"
           href="https://testingcf.jsdelivr.net/npm/element-ui@2.15.1/lib/theme-chalk/index.css"
   />
+
   <style>
     .dplayer-video-wrap .dplayer-video {
       height: 80vh !important;
@@ -45,6 +46,7 @@
       cursor: auto;
       padding-top: 2px;
     }
+
     #aplayer-search input {
       font-size: 13px;
       box-sizing: border-box;
@@ -62,20 +64,15 @@
     #aplayer-search button {
       font-size: 12px;
     }
-    .main {
-      display: flex;
-      flex-wrap: nowrap;
-    }
-    .download-btn {
-      position: fixed;
-      bottom: 14px;
-      left: 100px;
-    }
     @media screen and (min-width: 768px) {
       .main aside {
         width: 300px;
         margin-right: 20px;
       }
+    }
+    .main {
+      display: flex;
+      flex-wrap: nowrap;
     }
     .main .wrap-dplayer {
       flex-grow: 1;
@@ -84,70 +81,9 @@
   </style>
 </head>
 <body>
-<a
-        id="github-link"
-        href="https://github.com/Nayacco/lizhi"
-        style="position: absolute; top: 0; right: 0; color: white;"
-        title="Follow me on GitHub"
-        aria-label="Follow me on GitHub"
-        rel="noopener"
-        target="_blank"
->
-  <svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true">
-    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
-    <path
-            d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
-            fill="currentColor"
-            style="transform-origin: 130px 106px;"
-            class="octo-arm"
-    ></path>
-    <path
-            d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
-            fill="currentColor"
-    ></path>
-  </svg>
 </a>
 <div id="app" v-cloak>
   <div ref="aplayer"></div>
-  <el-button class="download-btn" type="primary" @click="drawer = true" plain icon="el-icon-download">下载歌曲</el-button>
-  <el-drawer title="下载歌曲" :visible.sync="drawer" direction="rtl" :wrapperClosable="false" :size="isMobile ? '100%' : '40%'">
-    <el-table :data="songList" @selection-change="handleDownloadSelect" width="800px" :max-height="computedTableHeight">
-      <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column property="name" label="歌名"></el-table-column>
-      <el-table-column property="artist" label="专辑"></el-table-column>
-    </el-table>
-    <el-alert :title="isMobile ? '当前为手机环境，歌曲一共10个G，请注意手机容量，建议部分下载或打开电脑下载' : '点击下载后，注意左上角弹窗，需同意下载多个文件'" type="info" show-icon></el-alert>
-    <el-progress
-            :percentage="percentage"
-            :text-inside="true"
-            :stroke-width="20"
-            style="margin: 10px;"
-            :format="percentage => `${(percentage/100*downloadSongList.length).toFixed()}/${downloadSongList.length}`"
-    ></el-progress>
-    <div style="margin-left: 20px;">
-      <el-button @click="handleDownloadSong" type="primary" :disabled="downloadSongList.length == 0" :loading="downloading">下载选中歌曲</el-button>
-    </div>
-  </el-drawer>
-  <header>
-    <h3 style="margin: 30px;">🎉🎉 南京、李志演唱会</h3>
-  </header>
-  <main class="main">
-    <aside>
-      <el-menu default-active="0" id="aside-menu" @select="handleSelect" :collapse="isPhone()">
-        <el-menu-item
-                v-for="(item, index) in videoList"
-                :key="index"
-                :index="String(index)"
-        >
-          <i class="el-icon-menu"></i>
-          <span slot="title">{{ item.name }}</span>
-        </el-menu-item>
-      </el-menu>
-    </aside>
-    <div class="wrap-dplayer">
-      <div ref="dplayer"></div>
-    </div>
-  </main>
 </div>
 </body>
 <script src="https://testingcf.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js"></script>
@@ -173,33 +109,11 @@
         percentage: 0,
         downloading: false,
         downloadSongList: [],
-        videoList: [
-          {
-            name: "2009-我爱南京跨年演唱会",
-            url:
-                    "https://testingcf.jsdelivr.net/gh/nj-lizhi/kn-2009-wanj@main/video/roadmap.js",
-          },
-          {
-            name: "2014-IO跨年演唱会",
-            url:
-                    "https://testingcf.jsdelivr.net/gh/nj-lizhi/kn-2014-io@main/video/roadmap.js",
-          },
-          {
-            name: "2015-看见北京站直播实录",
-            url:
-                    "https://testingcf.jsdelivr.net/gh/nj-lizhi/kn-2015-kj@main/video/roadmap.js",
-          },
-          {
-            name: "2018-洗心革面跨年演唱会",
-            url:
-                    "https://testingcf.jsdelivr.net/gh/nj-lizhi/kn-2018-xxgm@main/video/roadmap.js",
-          },
-        ],
+        videoList: []
       };
     },
     mounted() {
       this.createAplayer();
-      this.createDplayer();
       this.createDriver();
     },
     computed: {
@@ -211,59 +125,12 @@
       }
     },
     methods: {
-      handleSelect(index, indexPath) {
-        this.videoList[index];
-        this.dp.switchVideo({ url: this.videoList[index].url, type: 'hls' });
-        this.dp.play();
-      },
-      handleDownloadSelect(songList) {
-        this.downloadSongList = songList
-        this.percentage = 0
-      },
-      handleDownloadSong() {
-        this.downloading = true
-        let nextIndex = 0
-        let taskNum = 0
-        let timer = setInterval(() => {
-          if(taskNum < 3) {
-            let item = this.downloadSongList[nextIndex]
-            taskNum++
-            nextIndex++
-            fetch(item.url).then(res => {
-              res.blob().then(blob => {
-                let a = document.createElement('a');
-                let url = window.URL.createObjectURL(blob);
-                a.href = url;
-                a.download = item.name;
-                a.click();
-                window.URL.revokeObjectURL(url);
-                this.percentage = nextIndex/this.downloadSongList.length*100
-                taskNum--
-                if(nextIndex === this.downloadSongList.length) this.downloading = false
-              })
-            })
-          }
-          if(nextIndex === this.downloadSongList.length) clearInterval(timer)
-        }, 50)
-      },
-      // 视频播放器
-      createDplayer() {
-        this.dp = new DPlayer({
-          container: this.$refs.dplayer,
-          video: {
-            url: this.videoList[0].url,
-            type: "hls",
-          },
-        });
-        // 移除默认菜单
-        this.dp.template.menu.remove();
-      },
       // 音频播放器
       createAplayer() {
         this.ap = new APlayer({
           container: this.$refs.aplayer,
           audio: list,
-          fixed: true,
+          fixed: false,
           listMaxHeight: "calc(100vh - 66px)",
         });
         // 增加搜索
@@ -330,35 +197,6 @@
           prevBtnText: "上一步",
           showButtons: true,
         });
-        driver.defineSteps([
-          {
-            element: "#aside-menu",
-            popover: {
-              title: "☀️ 演唱会列表",
-              description: "目前只收集了4场演唱会，欢迎提供视频源或直接 PR",
-              position: "right",
-            },
-          },
-          {
-            element: ".aplayer-pic",
-            popover: {
-              title: "🎸 音乐播放器",
-              description:
-                      "共收录 249 首歌曲，覆盖大部分专辑和演唱会 LIVE 直播",
-              position: "right-bottom",
-              offset: -30,
-            },
-          },
-          {
-            element: "#github-link",
-            popover: {
-              title: "🎨 Github",
-              description: "如需下载音频文件，请点这里。<br />欢迎 ✨star✨",
-              position: "left",
-              offset: 30,
-            },
-          },
-        ]);
         driver.start();
       },
       isPhone() {
