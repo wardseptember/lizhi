@@ -1,208 +1,466 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="南京、李志" />
+  <meta name="format-detection" content="telephone=no" />
   <title>南京、李志</title>
+  <link rel="apple-touch-icon" href="https://testingcf.jsdelivr.net/gh/nj-lizhi/song@main/audio/cover.png" />
   <link
-          rel="stylesheet"
-          href="https://testingcf.jsdelivr.net/npm/driver.js/dist/driver.min.css"
+    rel="stylesheet"
+    href="https://testingcf.jsdelivr.net/npm/driver.js/dist/driver.min.css"
   />
   <link
-          rel="icon"
-          href="https://testingcf.jsdelivr.net/gh/nj-lizhi/song@main/audio/cover.png"
+    rel="icon"
+    href="https://testingcf.jsdelivr.net/gh/nj-lizhi/song@main/audio/cover.png"
   />
   <link
-          rel="stylesheet"
-          href="https://testingcf.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css"
+    rel="stylesheet"
+    href="https://testingcf.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css"
   />
   <link
-          rel="stylesheet"
-          href="https://testingcf.jsdelivr.net/npm/element-ui@2.15.1/lib/theme-chalk/index.css"
+    rel="stylesheet"
+    href="https://testingcf.jsdelivr.net/npm/element-ui@2.15.1/lib/theme-chalk/index.css"
   />
 
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 18px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      padding-top: max(20px, env(safe-area-inset-top));
+      padding-bottom: max(20px, env(safe-area-inset-bottom));
+      padding-left: max(20px, env(safe-area-inset-left));
+      padding-right: max(20px, env(safe-area-inset-right));
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      -webkit-overflow-scrolling: touch;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    #app {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      padding: 40px;
+      backdrop-filter: blur(10px);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .header h1 {
+      font-size: 3.5rem;
+      color: #333;
+      margin-bottom: 10px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    .header p {
+      font-size: 1.4rem;
+      color: #666;
+      font-weight: 300;
+    }
+
+    .player-wrapper {
+      background: white;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      margin-bottom: 30px;
+    }
+
     .dplayer-video-wrap .dplayer-video {
-      height: 80vh !important;
+      height: 70vh !important;
+      border-radius: 10px;
+      overflow: hidden;
     }
-    @media screen and (max-width: 768px) {
-      .dplayer-video-wrap .dplayer-video {
-        height: 40vh !important;
-      }
+
+    .aplayer {
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      margin: 0 !important;
+      -webkit-overflow-scrolling: touch;
     }
-    @media screen and (max-width: 768px) {
-      .aplayer.aplayer-fixed{
-        max-width: none;
-      }
+
+    .aplayer .aplayer-body,
+    .aplayer .aplayer-list,
+    .aplayer .aplayer-lrc {
+      -webkit-overflow-scrolling: touch;
     }
-    [v-cloak] {
-      display: none;
+
+    .aplayer.aplayer-fixed {
+      position: relative;
+      bottom: auto;
+      left: auto;
+      right: auto;
+      margin: 0;
+      max-width: 100%;
+      border-radius: 15px;
     }
+
+    .aplayer .aplayer-list {
+      max-height: 400px !important;
+      border-radius: 0 0 15px 15px;
+    }
+
     #aplayer-search {
       position: sticky;
       bottom: 0px;
-      background-color: #e9e9e9;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       cursor: auto;
-      padding-top: 2px;
+      padding: 15px;
+      border-radius: 0 0 15px 15px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
     }
 
     #aplayer-search input {
-      font-size: 13px;
-      box-sizing: border-box;
-      width: calc(100% - 116px);
-      border: 1px solid #ccc;
-      padding: 4px 8px;
-      border-radius: 3px;
-      box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-      transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+      flex: 1;
+      min-width: 200px;
+      font-size: 18px;
+      border: none;
+      padding: 14px 20px;
+      border-radius: 25px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      -webkit-appearance: none;
+      -webkit-user-select: text;
+      user-select: text;
     }
+
     #aplayer-search input:focus {
-      border-color:#66afe9;
-      outline:0;
+      outline: none;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      transform: translateY(-2px);
     }
+
     #aplayer-search button {
-      font-size: 12px;
+      font-size: 17px;
+      padding: 14px 28px;
+      border: none;
+      background: white;
+      color: #667eea;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      -webkit-appearance: none;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
-    @media screen and (min-width: 768px) {
-      .main aside {
-        width: 300px;
-        margin-right: 20px;
-      }
+
+    #aplayer-search button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      background: #f8f9fa;
     }
+
+    #aplayer-search button:active {
+      transform: scale(0.95);
+      background: #e9ecef;
+    }
+
     .main {
       display: flex;
-      flex-wrap: nowrap;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
     }
+
     .main .wrap-dplayer {
-      flex-grow: 1;
-      margin-right: 20px;
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .main aside {
+      flex: 0 0 300px;
+      min-width: 300px;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      color: #666;
+      font-size: 1.1rem;
+    }
+
+    [v-cloak] {
+      display: none;
+    }
+
+    /* iOS特定优化 */
+    @supports (-webkit-touch-callout: none) {
+      body {
+        min-height: -webkit-fill-available;
+      }
+      
+      .container {
+        min-height: -webkit-fill-available;
+      }
+    }
+
+    /* 响应式设计 */
+    @media screen and (max-width: 768px) {
+      body {
+        padding: 10px;
+        padding-top: max(10px, env(safe-area-inset-top));
+        padding-bottom: max(10px, env(safe-area-inset-bottom));
+        padding-left: max(10px, env(safe-area-inset-left));
+        padding-right: max(10px, env(safe-area-inset-right));
+      }
+
+      .container {
+        padding: 20px;
+        border-radius: 15px;
+      }
+
+      .header h1 {
+        font-size: 2.5rem;
+        word-break: keep-all;
+      }
+
+      .header p {
+        font-size: 1.2rem;
+      }
+
+      .player-wrapper {
+        padding: 15px;
+      }
+
+      .dplayer-video-wrap .dplayer-video {
+        height: 40vh !important;
+      }
+
+      .aplayer.aplayer-fixed {
+        max-width: none;
+      }
+
+      .main aside {
+        flex: 1 1 100%;
+        width: 100%;
+      }
+
+      #aplayer-search {
+        padding: 10px;
+      }
+
+      #aplayer-search input {
+        min-width: 100%;
+        font-size: 16px;
+      }
+
+      #aplayer-search button {
+        flex: 1;
+        font-size: 16px;
+        padding: 12px 20px;
+        min-height: 44px;
+      }
+
+      .aplayer .aplayer-list {
+        max-height: 50vh !important;
+      }
+    }
+
+    /* iPhone X及以上机型的刘海屏适配 */
+    @media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3),
+           only screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2),
+           only screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3),
+           only screen and (device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3),
+           only screen and (device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) {
+      #aplayer-search {
+        padding-bottom: max(15px, env(safe-area-inset-bottom));
+      }
+    }
+
+    /* 加载动画 */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .container {
+      animation: fadeIn 0.6s ease-out;
     }
   </style>
 </head>
 <body>
-</a>
-<div id="app" v-cloak>
-  <div ref="aplayer"></div>
-</div>
-</body>
-<script src="https://testingcf.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js"></script>
-<script src="https://testingcf.jsdelivr.net/npm/element-ui@2.15.1/lib/index.js"></script>
+  <div id="app" v-cloak>
+    <div class="container">
+      <div class="header">
+        <h1>🎵 南京、李志</h1>
+        <p>聆听音乐，感受生活</p>
+      </div>
+      
+      <div class="player-wrapper">
+        <div ref="aplayer"></div>
+      </div>
 
-<script src="https://testingcf.jsdelivr.net/npm/hls.js@0.14.4/dist/hls.min.js"></script>
-<script src="https://testingcf.jsdelivr.net/npm/dplayer@1.27.0/dist/DPlayer.min.js"></script>
+      <div class="footer">
+        <p>© 2024 音乐播放器 | 用心聆听每一首歌</p>
+      </div>
+    </div>
+  </div>
 
-<script src="https://testingcf.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
-<script src="https://testingcf.jsdelivr.net/gh/nj-lizhi/song@main/audio/list-v2.js"></script>
+  <script src="https://testingcf.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js"></script>
+  <script src="https://testingcf.jsdelivr.net/npm/element-ui@2.15.1/lib/index.js"></script>
+  <script src="https://testingcf.jsdelivr.net/npm/hls.js@0.14.4/dist/hls.min.js"></script>
+  <script src="https://testingcf.jsdelivr.net/npm/dplayer@1.27.0/dist/DPlayer.min.js"></script>
+  <script src="https://testingcf.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
+  <script src="https://testingcf.jsdelivr.net/gh/nj-lizhi/song@main/audio/list-v2.js"></script>
+  <script src="https://testingcf.jsdelivr.net/npm/driver.js/dist/driver.min.js"></script>
 
-<script src="https://testingcf.jsdelivr.net/npm/driver.js/dist/driver.min.js"></script>
-<!-- <script src="//unpkg.byted-static.com/xgplayer/2.31.2/browser/index.js" type="text/javascript"></script> -->
-
-<script>
-  new Vue({
-    el: "#app",
-    data: function () {
-      return {
-        dp: null,
-        songList: list,
-        drawer: false,
-        percentage: 0,
-        downloading: false,
-        downloadSongList: [],
-        videoList: []
-      };
-    },
-    mounted() {
-      this.createAplayer();
-      this.createDriver();
-    },
-    computed: {
-      computedTableHeight() {
-        return window.innerHeight - 240
+  <script>
+    new Vue({
+      el: "#app",
+      data: function () {
+        return {
+          dp: null,
+          songList: list,
+          drawer: false,
+          percentage: 0,
+          downloading: false,
+          downloadSongList: [],
+          videoList: []
+        };
       },
-      isMobile() {
-        return /Android|webOS|iPhone|iPad|BlackBerry/i.test(navigator.userAgent)
-      }
-    },
-    methods: {
-      // 音频播放器
-      createAplayer() {
-        this.ap = new APlayer({
-          container: this.$refs.aplayer,
-          audio: list,
-          fixed: false,
-          listMaxHeight: "calc(100vh - 66px)",
-        });
-        // 增加搜索
-        this.addAplayerSearch();
+      mounted() {
+        this.createAplayer();
+        this.createDriver();
       },
-      // 增加音频搜索
-      addAplayerSearch() {
-        let songListHtml = this.$refs.aplayer.querySelector("ol");
-        songListHtml.innerHTML += `
+      computed: {
+        computedTableHeight() {
+          return window.innerHeight - 240;
+        },
+        isMobile() {
+          return /Android|webOS|iPhone|iPad|BlackBerry/i.test(navigator.userAgent);
+        }
+      },
+      methods: {
+        // 音频播放器
+        createAplayer() {
+          this.ap = new APlayer({
+            container: this.$refs.aplayer,
+            audio: list,
+            fixed: false,
+            listMaxHeight: "400px",
+          });
+          // 增加搜索
+          this.addAplayerSearch();
+        },
+        // 增加音频搜索
+        addAplayerSearch() {
+          let songListHtml = this.$refs.aplayer.querySelector("ol");
+          songListHtml.innerHTML += `
             <li id="aplayer-search">
-              <input type="text" placeholder="搜索歌名或专辑">
-              <button id="pre-song">上一首</button>
-              <button id="next-song">下一首</button>
+              <input type="text" placeholder="🔍 搜索歌名或专辑">
+              <button id="pre-song">⏮ 上一首</button>
+              <button id="next-song">下一首 ⏭</button>
             </li>
-          `
-        let aplayerSearchDom = document.getElementById("aplayer-search");
-        let inputSearchDom = aplayerSearchDom.querySelector("input");
-        let preButtomDom = document.getElementById("pre-song");
-        let nextButtomDom = document.getElementById("next-song");
-        aplayerSearchDom.onclick = ev => {
-          let onEvent = ev || event;
-          onEvent.cancelBubble = true;
-          onEvent.stopPropagation();
-        };
-        let indexArr = []
-        let nowIndex = null
-        inputSearchDom.oninput = () => {
-          indexArr = []
-          nowIndex = null
-          list.forEach((item, index) => {
-            if(item.name.indexOf(inputSearchDom.value) !== -1
-                    || item.artist.indexOf(inputSearchDom.value) !== -1
-            ) {
-              indexArr.push(index)
-            };
-          })
-          if(indexArr.length > 0) {
-            this.ap.list.switch(indexArr[0])
-            this.ap.pause()
-            nowIndex = 0
-          }
-        };
-        preButtomDom.onclick = () => {
-          if(nowIndex === 0) nowIndex = indexArr.length
-          this.ap.list.switch(indexArr[--nowIndex])
-          this.ap.pause()
-        }
-        nextButtomDom.onclick = () => {
-          if(indexArr.length === nowIndex + 1) nowIndex = -1
-          this.ap.list.switch(indexArr[++nowIndex])
-          this.ap.pause()
-        }
+          `;
+          let aplayerSearchDom = document.getElementById("aplayer-search");
+          let inputSearchDom = aplayerSearchDom.querySelector("input");
+          let preButtomDom = document.getElementById("pre-song");
+          let nextButtomDom = document.getElementById("next-song");
+          
+          aplayerSearchDom.onclick = ev => {
+            let onEvent = ev || event;
+            onEvent.cancelBubble = true;
+            onEvent.stopPropagation();
+          };
+          
+          let indexArr = [];
+          let nowIndex = null;
+          
+          inputSearchDom.oninput = () => {
+            indexArr = [];
+            nowIndex = null;
+            list.forEach((item, index) => {
+              if(item.name.indexOf(inputSearchDom.value) !== -1
+                || item.artist.indexOf(inputSearchDom.value) !== -1
+              ) {
+                indexArr.push(index);
+              }
+            });
+            if(indexArr.length > 0) {
+              this.ap.list.switch(indexArr[0]);
+              this.ap.pause();
+              nowIndex = 0;
+            }
+          };
+          
+          preButtomDom.onclick = () => {
+            if(nowIndex === 0) nowIndex = indexArr.length;
+            this.ap.list.switch(indexArr[--nowIndex]);
+            this.ap.pause();
+          };
+          
+          nextButtomDom.onclick = () => {
+            if(indexArr.length === nowIndex + 1) nowIndex = -1;
+            this.ap.list.switch(indexArr[++nowIndex]);
+            this.ap.pause();
+          };
+        },
+        // 指引
+        createDriver() {
+          if(document.cookie.indexOf("isFirstVisit=false") !== -1) return;
+          document.cookie = "isFirstVisit=false";
+          let driver = new Driver({
+            animate: true,
+            opacity: 0.7,
+            doneBtnText: "完成",
+            closeBtnText: "关闭",
+            nextBtnText: "下一步",
+            prevBtnText: "上一步",
+            showButtons: true,
+          });
+          driver.start();
+        },
+        isPhone() {
+          return window.screen.width < 768;
+        },
       },
-      // 指引
-      createDriver() {
-        if(document.cookie.indexOf("isFirstVisit=false") !== -1) return;
-        document.cookie = "isFirstVisit=false";
-        let driver = new Driver({
-          animate: true,
-          opacity: 0.7,
-          doneBtnText: "完成",
-          closeBtnText: "关闭",
-          nextBtnText: "下一步",
-          prevBtnText: "上一步",
-          showButtons: true,
-        });
-        driver.start();
-      },
-      isPhone() {
-        return window.screen.width < 768
-      },
-    },
-  });
-</script>
+    });
+  </script>
+</body>
 </html>
