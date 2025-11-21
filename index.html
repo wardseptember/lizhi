@@ -133,20 +133,6 @@
       border-radius: 0 0 15px 15px;
     }
 
-    /* 确保列表始终显示 */
-    .aplayer .aplayer-list {
-      display: block !important;
-      opacity: 1 !important;
-    }
-
-    /* 列表按钮提示 */
-    .aplayer .aplayer-icon-menu::after {
-      content: '歌曲列表';
-      font-size: 12px;
-      margin-left: 5px;
-      font-weight: normal;
-    }
-
     #aplayer-search {
       position: sticky;
       bottom: 0px;
@@ -308,18 +294,6 @@
       .aplayer .aplayer-list {
         max-height: 50vh !important;
       }
-
-      /* 移动端确保列表可见 */
-      .aplayer .aplayer-list {
-        display: block !important;
-        opacity: 1 !important;
-      }
-
-      /* 移动端列表按钮提示 */
-      .aplayer .aplayer-icon-menu::after {
-        content: '列表';
-        font-size: 11px;
-      }
     }
 
     /* iPhone X及以上机型的刘海屏适配 */
@@ -410,36 +384,20 @@
             audio: list,
             fixed: false,
             listMaxHeight: "400px",
-            listFolded: false,  // 默认展开列表，确保搜索框可见
           });
           // 增加搜索
           this.addAplayerSearch();
-          // 确保列表在移动端也展开
-          setTimeout(() => {
-            const listEl = this.$refs.aplayer.querySelector('.aplayer-list');
-            if (listEl) {
-              listEl.classList.add('aplayer-list-show');
-            }
-          }, 100);
         },
         // 增加音频搜索
         addAplayerSearch() {
           let songListHtml = this.$refs.aplayer.querySelector("ol");
           songListHtml.innerHTML += `
             <li id="aplayer-search">
-              <input type="text" placeholder="🔍 搜索歌名或专辑" autocomplete="off">
+              <input type="text" placeholder="🔍 搜索歌名或专辑">
               <button id="pre-song">⏮ 上一首</button>
               <button id="next-song">下一首 ⏭</button>
             </li>
           `;
-          
-          // 确保搜索框可见
-          setTimeout(() => {
-            const searchEl = document.getElementById('aplayer-search');
-            if (searchEl) {
-              searchEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }
-          }, 200);
           let aplayerSearchDom = document.getElementById("aplayer-search");
           let inputSearchDom = aplayerSearchDom.querySelector("input");
           let preButtomDom = document.getElementById("pre-song");
